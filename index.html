@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogForge Pro - AI-Powered Blog Creation</title>
+    <style>
+        :root {
+            --primary: #FFE77A;
+            --secondary: #89CFF0;
+            --background: #0A0A0A;
+            --surface: #1A1A1A;
+            --text: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        input, select, button {
+            padding: 0.8rem;
+            border: 1px solid var(--secondary);
+            border-radius: 4px;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        button {
+            background: var(--primary);
+            color: var(--background);
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .preview-section {
+            border: 1px solid var(--secondary);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            min-height: 500px;
+        }
+
+        .blog-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        #blogContent {
+            line-height: 1.6;
+        }
+
+        .seo-score {
+            color: var(--primary);
+            padding: 1rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .tone-selector {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .tone-option {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--secondary);
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .tone-option.active {
+            background: var(--secondary);
+            color: var(--background);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="color: var(--primary)">BlogForge Pro</h1>
+        
+        <div class="controls">
+            <input type="text" id="blogTopic" placeholder="Enter your blog topic...">
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+            </select>
+            <input type="file" id="imageUpload" accept="image/*">
+            <button onclick="generateBlog()">Generate Blog Post</button>
+        </div>
+
+        <div class="tone-selector">
+            <div class="tone-option active" onclick="setTone('professional')">Professional</div>
+            <div class="tone-option" onclick="setTone('casual')">Casual</div>
+            <div class="tone-option" onclick="setTone('friendly')">Friendly</div>
+        </div>
+
+        <div class="seo-score">
+            SEO Score: 85/100 - Recommended improvements: Add more keywords in meta description
+        </div>
+
+        <div class="preview-section">
+            <img id="imagePreview" class="blog-image" alt="Blog visual">
+            <h1 id="blogTitle">Generated Blog Title</h1>
+            <div id="blogContent">
+                <!-- Generated content will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setTone(tone) {
+            document.querySelectorAll('.tone-option').forEach(opt => 
+                opt.classList.remove('active'));
+            event.target.classList.add('active');
+            // Add logic to modify content tone
+        }
+
+        function generateBlog() {
+            const topic = document.getElementById('blogTopic').value;
+            const language = document.getElementById('languageSelect').value;
+            
+            // Simulated content generation
+            document.getElementById('blogTitle').textContent = `The Ultimate Guide to ${topic}`;
+            document.getElementById('blogContent').innerHTML = `
+                <h2 style="color: var(--primary)">Why ${topic} Matters in 2024</h2>
+                <p>${topic} has become one of the most significant developments in recent years. In this comprehensive guide, we'll explore...</p>
+                <h3 style="color: var(--secondary)">Key Benefits of ${topic}</h3>
+                <ul>
+                    <li>Increased efficiency</li>
+                    <li>Improved productivity</li>
+                    <li>Enhanced user experience</li>
+                </ul>
+                <meta name="description" content="Discover everything you need to know about ${topic} in our complete guide. Learn best practices, benefits, and future trends.">
+            `;
+        }
+
+        // Image preview handler
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById('imagePreview').src = reader.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        });
+    </script>
+</body>
+</html>
