@@ -1,172 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlogForge Pro - AI-Powered Blog Creation</title>
-    <style>
-        :root {
-            --primary: #FFE77A;
-            --secondary: #89CFF0;
-            --background: #0A0A0A;
-            --surface: #1A1A1A;
-            --text: #FFFFFF;
-        }
+  <meta charset="UTF-8" />
+  <title>Trendy Blog Generator</title>
+  
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
 
-        body {
-            background-color: var(--background);
-            color: var(--text);
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 2rem;
-        }
+  <style>
+    /* Body: pastel gradient background for trendy Gen Z aesthetic */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+      color: #333; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: var(--surface);
-            border-radius: 8px;
-            padding: 2rem;
-        }
+    /* Card-style container */
+    .blog-generator {
+      width: 90%;
+      max-width: 600px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      text-align: center;
+    }
 
-        .controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
+    /* Heading */
+    .blog-generator h2 {
+      margin-top: 0;
+      font-weight: 600;
+      font-size: 24px;
+      color: #444;
+    }
 
-        input, select, button {
-            padding: 0.8rem;
-            border: 1px solid var(--secondary);
-            border-radius: 4px;
-            background: var(--background);
-            color: var(--text);
-        }
+    /* Form controls */
+    .generator-controls {
+      margin-top: 20px;
+    }
 
-        button {
-            background: var(--primary);
-            color: var(--background);
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+    .generator-controls input[type="text"],
+    .generator-controls select {
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border: 2px solid #eee;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border 0.3s ease;
+    }
 
-        button:hover {
-            transform: scale(1.05);
-        }
+    .generator-controls input[type="text"]:focus,
+    .generator-controls select:focus {
+      border: 2px solid #ff9a9e;
+      outline: none;
+    }
 
-        .preview-section {
-            border: 1px solid var(--secondary);
-            padding: 1.5rem;
-            margin-top: 2rem;
-            min-height: 500px;
-        }
+    /* Button */
+    button.generate-btn {
+      margin-top: 15px;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    button.generate-btn:hover {
+      transform: scale(1.03);
+    }
 
-        .blog-image {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 1rem;
-        }
+    /* Preview section: shows blog content & image */
+    .preview-section {
+      margin-top: 30px;
+      text-align: left;
+    }
 
-        #blogContent {
-            line-height: 1.6;
-        }
+    /* Generated Blog Image */
+    #blog-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 20px 0;
+      display: none; /* hidden until an image is available */
+    }
 
-        .seo-score {
-            color: var(--primary);
-            padding: 1rem;
-            border-bottom: 2px solid var(--secondary);
-        }
+    /* SEO Score Container */
+    .seo-score-container {
+      margin-top: 20px;
+      text-align: center;
+    }
 
-        .tone-selector {
-            display: flex;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
+    /* SEO Score Label */
+    .seo-score-label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
 
-        .tone-option {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--secondary);
-            border-radius: 20px;
-            cursor: pointer;
-        }
+    /* SEO Score Bar (simple progress bar) */
+    .score-bar {
+      position: relative;
+      width: 100%;
+      height: 20px;
+      background-color: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-        .tone-option.active {
-            background: var(--secondary);
-            color: var(--background);
-        }
-    </style>
+    .score-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0; /* will be set dynamically */
+      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+      transition: width 0.5s ease;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1 style="color: var(--primary)">BlogForge Pro</h1>
-        
-        <div class="controls">
-            <input type="text" id="blogTopic" placeholder="Enter your blog topic...">
-            <select id="languageSelect">
-                <option value="en">English</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-            </select>
-            <input type="file" id="imageUpload" accept="image/*">
-            <button onclick="generateBlog()">Generate Blog Post</button>
-        </div>
 
-        <div class="tone-selector">
-            <div class="tone-option active" onclick="setTone('professional')">Professional</div>
-            <div class="tone-option" onclick="setTone('casual')">Casual</div>
-            <div class="tone-option" onclick="setTone('friendly')">Friendly</div>
-        </div>
+  <div class="blog-generator">
+    <h2>Trendy Blog Generator</h2>
 
-        <div class="seo-score">
-            SEO Score: 85/100 - Recommended improvements: Add more keywords in meta description
-        </div>
+    <!-- Controls -->
+    <div class="generator-controls">
+      <!-- Topic Input -->
+      <input type="text" id="topic" placeholder="Enter a hot topic..." />
 
-        <div class="preview-section">
-            <img id="imagePreview" class="blog-image" alt="Blog visual">
-            <h1 id="blogTitle">Generated Blog Title</h1>
-            <div id="blogContent">
-                <!-- Generated content will appear here -->
-            </div>
-        </div>
+      <!-- Tone Selection -->
+      <select id="tone">
+        <option value="professional">Professional</option>
+        <option value="casual">Casual</option>
+      </select>
+
+      <!-- Language Selection -->
+      <select id="language">
+        <option value="en">English</option>
+        <option value="zh">Chinese</option>
+        <option value="jp">Japanese</option>
+      </select>
     </div>
 
-    <script>
-        function setTone(tone) {
-            document.querySelectorAll('.tone-option').forEach(opt => 
-                opt.classList.remove('active'));
-            event.target.classList.add('active');
-            // Add logic to modify content tone
-        }
+    <!-- Generate Button -->
+    <button class="generate-btn" onclick="generateBlog()">Create Blog</button>
 
-        function generateBlog() {
-            const topic = document.getElementById('blogTopic').value;
-            const language = document.getElementById('languageSelect').value;
-            
-            // Simulated content generation
-            document.getElementById('blogTitle').textContent = `The Ultimate Guide to ${topic}`;
-            document.getElementById('blogContent').innerHTML = `
-                <h2 style="color: var(--primary)">Why ${topic} Matters in 2024</h2>
-                <p>${topic} has become one of the most significant developments in recent years. In this comprehensive guide, we'll explore...</p>
-                <h3 style="color: var(--secondary)">Key Benefits of ${topic}</h3>
-                <ul>
-                    <li>Increased efficiency</li>
-                    <li>Improved productivity</li>
-                    <li>Enhanced user experience</li>
-                </ul>
-                <meta name="description" content="Discover everything you need to know about ${topic} in our complete guide. Learn best practices, benefits, and future trends.">
-            `;
-        }
+    <!-- Preview Section -->
+    <div class="preview-section" id="blog-output">
+      <!-- Blog Image -->
+      <img id="blog-image" alt="Blog-related" />
 
-        // Image preview handler
-        document.getElementById('imageUpload').addEventListener('change', function(e) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                document.getElementById('imagePreview').src = reader.result;
-            }
-            reader.readAsDataURL(e.target.files[0]);
+      <!-- Blog Text Content -->
+      <p id="blog-text" style="white-space:pre-wrap; margin-top:0;"></p>
+
+      <!-- SEO Score -->
+      <div class="seo-score-container" id="seo-score-section" style="display:none;">
+        <div class="seo-score-label">SEO Score: <span id="seo-score-value"></span>%</div>
+        <div class="score-bar">
+          <div class="score-fill" id="seo-score-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Replace with your real DeepSeek endpoint:
+    const DEEPSEEK_API_URL = 'https://api.deepseek.io/v1/generate';
+
+    // Replace with your real API key:
+    const API_KEY = 'sk-c30f2a8f521c4f56b0e44e45aef718ef';
+
+    async function generateBlog() {
+      const topic = document.getElementById('topic').value.trim();
+      const tone = document.getElementById('tone').value;
+      const language = document.getElementById('language').value;
+      const blogText = document.getElementById('blog-text');
+      const blogImage = document.getElementById('blog-image');
+      const seoScoreSection = document.getElementById('seo-score-section');
+      const seoScoreValue = document.getElementById('seo-score-value');
+      const seoScoreFill = document.getElementById('seo-score-fill');
+
+      // Reset the UI
+      blogText.textContent = '';
+      blogImage.style.display = 'none';
+      blogImage.src = '';
+      seoScoreSection.style.display = 'none';
+      seoScoreFill.style.width = '0';
+      seoScoreValue.textContent = '';
+
+      // Basic validation
+      if (!topic) {
+        blogText.textContent = 'Please enter a topic before generating the blog.';
+        return;
+      }
+
+      // Show a loading indicator in the text area
+      blogText.textContent = 'Generating content, please wait...';
+
+      try {
+        // Example payload (adjust to match the DeepSeek API)
+        const payload = {
+          topic,
+          tone,
+          language
+        };
+
+        // Make the API request
+        const response = await fetch(DEEPSEEK_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + API_KEY
+          },
+          body: JSON.stringify(payload)
         });
-    </script>
+
+        if (!response.ok) {
+          throw new Error(`Error from DeepSeek API: ${response.status} ${response.statusText}`);
+        }
+
+        // Sample JSON structure from DeepSeek (adjust as necessary):
+        // {
+        //   "content": "...",
+        //   "imageUrl": "http://...someimage.jpg",
+        //   "seoScore": 85
+        // }
+        const data = await response.json();
+
+        // 1) Handle text content
+        if (data && data.content) {
+          blogText.textContent = data.content;
+        } else {
+          blogText.textContent = 'No content returned from the DeepSeek API.';
+        }
+
+        // 2) Handle image
+        if (data && data.imageUrl) {
+          blogImage.src = data.imageUrl;
+          blogImage.style.display = 'block';
+        }
+
+        // 3) Handle SEO score
+        if (data && typeof data.seoScore === 'number') {
+          const score = data.seoScore;
+          seoScoreValue.textContent = score;
+          seoScoreSection.style.display = 'block';
+          
+          // Ensure the score is between 0 and 100
+          const safeScore = Math.max(0, Math.min(100, score));
+          seoScoreFill.style.width = `${safeScore}%`;
+        }
+      } catch (error) {
+        console.error('DeepSeek API Error:', error);
+        blogText.textContent = 'Error generating content. Please try again or check the console for details.';
+      }
+    }
+  </script>
+  
 </body>
 </html>
+
